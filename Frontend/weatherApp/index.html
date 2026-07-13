@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .first_input {
+            width: 290px;
+            height: 30px;
+
+        }
+
+        .Search_button {
+            height: 30px;
+            border: none;
+            cursor: pointer;
+            filter: brightness(1.2);
+        }
+
+        .search {
+            margin-top: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-left: 20px;
+
+
+        }
+
+        .weather {
+            margin-top: 50px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+
+            height: 300px;
+            width: 300px;
+            border: 1px solid white;
+            border-radius: 10px;
+            background-color: rgb(82, 139, 232);
+            color: white;
+
+        }
+
+        .main {
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h2 {
+            color:white;
+        }
+        .reset{
+            margin-top: 50px;
+            cursor: pointer;
+        }
+        h1{
+            color: rgb(171, 138, 221);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="main">
+        <h1 style="font-size: xxx-large;">Accurate Weather</h1>
+        <div class="search">
+            <input class="first_input" type="search" placeholder="Type Your City">
+            <button class="Search_button">🔍</button>
+        </div>
+        <div class="weather"></div>
+        <button class="reset" type="reset">Reset</button>
+
+
+    </div>
+    <script>
+        const input = document.querySelector(".first_input");
+        const button = document.querySelector(".Search_button");
+        const show_weather = document.querySelector(".weather");
+        const api_key = "5245e3602ba99b23bf2b8f6ff8baebbf";
+        const button2= document.querySelector(".reset")
+
+
+        button.addEventListener("click", async () => {
+            // console.log("buttonclicked");
+
+            const city = input.value;
+            getWeather(city)
+        });
+        async function getWeather(city) {
+            const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${api_key}&units=metric`;
+            
+            // console.log(url);
+
+            const response = await fetch(url);
+            // console.log(response.status);
+            // console.log(response.ok);
+            const data = await response.json();
+            const icon = data.weather[0].icon
+            const iconUrl = `https://openweathermap.org/img/wn/${icon}@2x.png`
+            
+            // console.log(icon);
+            
+
+            // console.log(data);
+            show_weather.innerHTML = `
+            <h2>${data.name}</h2>
+             <img src="${iconUrl}" alt="Weather Icon">
+            <p>Temperature : ${data.main.temp} °C</p>
+            <p>Feels Like : ${data.main.feels_like} °C</p>
+           
+            <p>Humidity: ${data.main.humidity}%</p>
+            `;
+        }
+        button2.addEventListener("click",()=>{
+            getWeather("Jaipur")
+        })
+       
+        getWeather("Jaipur")
+    </script>
+</body>
+
+</html>
